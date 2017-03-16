@@ -1,5 +1,5 @@
 /*
- * Alerts when a button is pressed more than 10 seconds
+ * Alerts when one of the button is pressed more than 10 seconds
  */
 
 // Define digital outputs for the buttons
@@ -8,7 +8,10 @@ const int btnPin4 = 4;
 const int btnPin5 = 5;
 
 // Timer variables
-unsigned long lastTime, newTime;
+unsigned long timeStill;
+unsigned long lastTime1, newTime1;
+unsigned long lastTime2, newTime2;
+unsigned long lastTime3, newTime3;
 
 // Store button readings 
 int reading3, reading4, reading5;
@@ -24,6 +27,14 @@ void setup() {
   Serial.begin(9600);
 }
 
+void checkImmobility (long lastMoveTime) {
+  timeStill = millis() - lastMoveTime;
+  Serial.println(timeStill/1000);
+  if (timeStill > 10000){
+    Serial.println("MOVE 1! YOU HAVE BEEN STILL FOR TOO LONG.");
+  }
+}
+
 // This method is called continuously by the Arduino
 void loop() {
 
@@ -32,26 +43,27 @@ void loop() {
   reading4 = digitalRead(btnPin4);
   reading5 = digitalRead(btnPin5);
 
- if (reading3 == HIGH) {
-      // Increase timer if button is pressed continuously
-      newTime = millis() - lastTime;
-
-     // Print the duration in seconds
-      Serial.println(newTime/1000);
-
-     if (newTime > 10000){
-        Serial.println("MOVE! YOU HAVE BEEN STILL FOR TOO LONG.");
-      }
+  //
+  if (reading3 == HIGH) {
+    checkImmobility(lastTime1);
   }
   else {
      // Store the time the button was let go
-     lastTime = millis();  
+     lastTime1 = millis();  
   }
 
- // Print button inputs
-  //Serial.println("--------");
-  //Serial.println(reading3);
-  //Serial.println(reading4);
-  //Serial.println(reading5);
-  //Serial.println("========");
+  if (reading4 == HIGH) {
+    checkImmobility(lastTime2);
+  }
+  else {
+   lastTime2 = millis();  
+  }
+
+  if (reading5 == HIGH) {
+    checkImmobility(lastTime3);
+  }
+  else {
+     lastTime3 = millis();  
+  }
+
 }
