@@ -27,11 +27,13 @@ void setup() {
   Serial.begin(9600);
 }
 
+// Calculates how long it has been since lastMoveTime
 void checkImmobility (long lastMoveTime) {
   timeStill = millis() - lastMoveTime;
   Serial.println(timeStill/1000);
+  //over 10 seconds
   if (timeStill > 10000){
-    Serial.println("MOVE 1! YOU HAVE BEEN STILL FOR TOO LONG.");
+    Serial.println("MOVE! YOU HAVE BEEN STILL FOR TOO LONG.");
   }
 }
 
@@ -43,13 +45,13 @@ void loop() {
   reading4 = digitalRead(btnPin4);
   reading5 = digitalRead(btnPin5);
 
-  //
+  // Everytime this button is pressed
   if (reading3 == HIGH) {
     checkImmobility(lastTime1);
   }
   else {
-     // Store the time the button was let go
-     lastTime1 = millis();  
+    // Store the time the button was let go
+    lastTime1 = millis();  
   }
 
   if (reading4 == HIGH) {
