@@ -9,12 +9,6 @@ const int btnPin2 = 2;
 const int btnPin3 = 3;
 const int btnPin4 = 4;
 
-// Timer variables
-unsigned long timeStill;
-unsigned long lastTime1, newTime1;
-unsigned long lastTime2, newTime2;
-unsigned long lastTime3, newTime3;
-
 // Store button readings 
 int reading2, reading3, reading4;
 
