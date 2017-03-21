@@ -57,7 +57,7 @@ void loop() {
     Serial.print(" 4 is working ");
   }
   else {
-     Serial.println(" 4 ***fail*** ");
+     Serial.print(" 4 ***fail*** ");
   }
-
+  Serial.println(" </end>");
 }
