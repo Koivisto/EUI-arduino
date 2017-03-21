@@ -4,6 +4,8 @@
 
 // Define digital outputs for the buttons
 const int btnPin3 = 3;
+//constant is for program
+//value is from the arduino
 const int btnPin4 = 4;
 const int btnPin5 = 5;
 
