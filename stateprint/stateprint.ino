@@ -40,7 +40,7 @@ void checkImmobility () {
   // Update new values to btnsSameStateMs, find 
   for (int i = 0; i <= 11; i++){
     btnsSameStateMs[i] = millis() - btnsLastStateChangeMs[i];
-    if (btnsSameStateMs[i] < latestMovementMs) {latestMovementMs = btnsSameStateMs[i]}
+    if (btnsSameStateMs[i] < latestMovementMs) {latestMovementMs = btnsSameStateMs[i];}
   }
 
   // If all movements have been since 10 seconds has passed, print warning
@@ -109,7 +109,10 @@ void loop() {
 
   // Read the button inputs, if state has changed update also btnsLastStateChangeMs array
   for (int i = 0; i <= 11; i++){
-    boolean fetchedState = if (digitalRead(btnsInput[i]) == HIGH){return true;} else {return false;};
+    boolean fetchedState = false;
+    if (digitalRead(btnsInput[i]) == HIGH){
+      fetchedState = true;
+    } 
     // Update button state to new state if not the same as before. 
     if (fetchedState != btnsState[i]) {
       btnsState[i] = fetchedState; 
