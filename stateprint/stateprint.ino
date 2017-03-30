@@ -42,9 +42,18 @@ void checkImmobility () {
   }
 
   // If all movements have been since 10 seconds has passed, print warning
-  if (latestMovementMs > 10000){
+  if (latestMovementMs > 10000 && isPressed()){
     Serial.println("MOVE! YOU HAVE BEEN STILL FOR TOO LONG.");
   }
+}
+
+// Returns 1 if any of the sensors is pressed, else 0
+int isPressed () {
+  int isPressed = 0;
+  for (int i = 0; i <= 11; i++){
+    if (btnsState[i]) {isPressed = 1;}
+  }
+  return isPressed;
 }
 
 // This method is called continuously by the Arduino
