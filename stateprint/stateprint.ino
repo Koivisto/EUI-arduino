@@ -56,6 +56,19 @@ int isPressed () {
   return isPressed;
 }
 
+// Makes sure that last sensor row has some activation or prints warning
+void checkLastRow() {
+  int isLastRowPressed = 0;
+  for (int i = 0; i <= 3; i++){
+    if (btnsState[i]) {isLastRowPressed = 1;}
+  }
+
+  // If front is pressed, but the last row is not
+  if (isPressed() && !isLastRowPressed){
+    Serial.println("FIX POSTURE! PUT YOUR BACK TO THE CHAIR.");
+  }
+}
+
 // This method is called continuously by the Arduino
 void loop() {
 
@@ -70,7 +83,9 @@ void loop() {
     }
   }
 
+  // Check various conditions, print warnings if needed
   checkImmobility();
+  checkLastRow();
 
   /* Print state diagram 
   *  1-4 | _ _ _ _ |
