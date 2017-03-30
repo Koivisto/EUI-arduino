@@ -26,10 +26,10 @@ void setup() {
 }
 
 void printI(){
-  Serial.print(" X");
+  Serial.print("1 ");
 }
 void printO(){
-  Serial.print(" _");
+  Serial.print("0 ");
 }
 
 // Calculates how long it has been since movement happened, print warning if over 10 sec
@@ -121,10 +121,20 @@ void loop() {
     }
   }
 
+  for (int i = 0; i <= 11; i++){
+    if (btnsState[i]){
+      printI();
+    }
+    else {
+      printO();
+    }
+  }
+  Serial.println("");
+
   // Check various conditions, print warnings if needed
-  checkImmobility();
-  checkLastRow();
-  checkLastPause();
+  //checkImmobility();
+  //checkLastRow();
+  //checkLastPause();
 
   /* Print state diagram 
   *  1-4 | _ _ _ _ |
@@ -134,11 +144,11 @@ void loop() {
   *  X marks pressed state. 
   */
 
-  for (int i = 0; i <= 11; i++){
+  /*for (int i = 0; i <= 11; i++){
     if (i=0) {Serial.print("1-4 |");} //Row 1 start
     if (i=3) {Serial.println(" |");Serial.print("5-8 |");} //Row 1 end, Row 2 start
     if (i=7) {Serial.println(" |");Serial.print("9-12|");} //Row 2 end, Row 3 start
     if (btnsState[i]) {printI();} else {printO();}
     if (i=11) {Serial.print("1-4 |");Serial.println("---------------");} //Row 3 end
-  }
+  }*/
 }
