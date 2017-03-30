@@ -11,6 +11,8 @@ boolean btnsState[12] = {false, false, false, false, false, false, false, false,
 long btnsSameStateMs[12] = {0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L};
 // Initialize timestamp when last change happened
 long btnsLastStateChangeMs[12] = {0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L};
+// Initialize counter how long sitting session has been
+long lastStandMs, sinceLastStandMs, sincePauseStart = 0L;
 
 // Called once when the code is run
 void setup() {
@@ -69,6 +71,39 @@ void checkLastRow() {
   }
 }
 
+/*
+ * Check that regular pauses from sittings are kept 
+ * Gives warning if last standing pause has been over 60 seconds ago
+ * Counts down from 10 seconds for minimum pause duration
+ */
+void checkLastPause() {
+  if (isPressed()) {
+    sinceLastStandMs = millis() - lastStandMs;
+    sincePauseStart = millis(); //updated here until pause really starts
+  }
+  else {
+    lastStandMs = millis(); //updated here until sitting really starts
+    sincePauseStart = millis() - sinceLastStandMs; // unintuitive naming for this
+  }
+
+  // Gives warning if last standing pause has been over 60 seconds ago
+  if (sinceLastStandMs > 60000 && isPressed()){
+    Serial.println("STAND UP! YOU HAVE BEEN SITTING FOR TOO LONG.");
+  }
+  // Counts down from 10 seconds for minimum pause duration
+  else if (sincePauseStart > 0 && sincePauseStart <= 10000) {
+    Serial.print("STAY AWAY FOR " );
+    Serial.print((10000 - sincePauseStart)/1000);
+    Serial.println(" SECONDS" );
+    // Warns if violated
+    if (isPressed()) {Serial.println("I SEE YOU SITTING!" );}
+  }
+  //else chair is abandoned and feels lonely. It no longer wants to be lonely.
+  else if (!isPressed()){
+    Serial.println("SIT DOWN!");
+  }
+}
+
 // This method is called continuously by the Arduino
 void loop() {
 
@@ -86,6 +121,7 @@ void loop() {
   // Check various conditions, print warnings if needed
   checkImmobility();
   checkLastRow();
+  checkLastPause();
 
   /* Print state diagram 
   *  1-4 | _ _ _ _ |
