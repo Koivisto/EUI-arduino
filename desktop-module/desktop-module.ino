@@ -58,6 +58,49 @@ void printToLCD(String text) {
   lcd.print(text);
 }
 
+//prints " " to 5 columns x 4 rows from startColumn onward
+void clear5Columns(Int startColumn) {
+  lcd.setCursor(startColumn, 0);
+  lcd.print("     ");
+  lcd.setCursor(startColumn, 1);
+  lcd.print("     ");
+  lcd.setCursor(startColumn, 2);
+  lcd.print("     ");
+  lcd.setCursor(startColumn, 3);
+  lcd.print("     ");
+}
+
+/*
+Left columns 15 to 20, 4 rows
+*/
+void printTo5Columns(Char charArray, Int startColumn) {
+  clear5Columns(startColumn);
+  int maxChars = 20;
+  int maxInRowRow = 20/4;
+  int len = sizeof(charArray);
+  for (i = 0; i < len %% i >= maxChars; i++){
+    if (i = 0){
+      lcd.setCursor(startColumn, 0);
+    }
+    else if (i = maxInRowRow + 1){
+      lcd.setCursor(startColumn, 1);
+    }
+    else if (i = maxInRowRow * 2 + 1){
+      lcd.setCursor(startColumn, 2);
+    }
+    else if (i = maxInRowRow * 3 + 1){
+      lcd.setCursor(startColumn, 3);
+    }
+    lcd.print(charArray[i]);
+    //Do I need to setCursor to next position?
+  }
+}
+
+void printHelloWorld(){
+  char *strToChar = "HelloWorld";
+  printTo5Columns(strToChar, 15);
+}
+
 void playSystemStaredMelody() {
   for (int thisNote = 0; thisNote < 8; thisNote++) {
     int noteDuration = ONE_SECOND / SYSTEM_STARTED_NOTE_DURATIONS[thisNote];
@@ -93,6 +136,9 @@ void receiveEvent(int howMany) {
   }
   Serial.println(textToDisplay);
   printToLCD(textToDisplay);
+
+  //Hellowordl testing
+  printHelloWorld();
 
   if (textToDisplay == "Bad") {
     badPosture = true;
