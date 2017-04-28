@@ -23,6 +23,11 @@ int ALERT_NOTE_DURATIONS[] = {
   8, 8, 8
 };
 
+String sitMapRow1 = " |  ";
+String sitMapRow2 = "- - ";
+String sitMapRow3 = " |  ";
+String sitMapRow4 = "    ";
+
 boolean badPosture = false;
 void setup() {
   serialSetup();
@@ -50,12 +55,6 @@ void serialSetup() {
 void LCDSetup() {
   // set up the LCD's number of columns and rows:
   lcd.begin(20, 4);  
-}
-
-void printToLCD(String text) {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(text);
 }
 
 //prints " " to 5 columns x 4 rows from startColumn onward
@@ -129,19 +128,67 @@ void wireConnectionSetup() {
 }
 
 void receiveEvent(int howMany) {
-  String textToDisplay = "";
+  String command = "";
   while (1 <= Wire.available()) { 
     char c = Wire.read();
-    textToDisplay += c;
+    command += c;
   }
-  Serial.println(textToDisplay);
-  printToLCD(textToDisplay);
+  Serial.println(command);
 
-  //Hellowordl testing
-  printHelloWorld();
+  String sitMapRow1ToShow = sitMapRow1;
+  String sitMapRow2ToShow = sitMapRow2;
+  String sitMapRow3ToShow = sitMapRow3;
+  String sitMapRow4ToShow = sitMapRow4;
 
-  if (textToDisplay == "Bad") {
-    badPosture = true;
+  String direction = command.substring(0, 3);
+  if (direction == "FNW") {
+    sitMapRow3ToShow = " |X ";
+  } else if (direction == "F N") {
+    sitMapRow3ToShow = " X  ";
+  } else if (direction == "FNE") {
+    sitMapRow3ToShow = "X|  ";
+  } else if (direction == "F E") {
+    sitMapRow2ToShow = "X - ";
+  } else if (direction == "FSE") {
+    sitMapRow1ToShow = "X|  ";
+  } else if (direction == "F S") {
+    sitMapRow1ToShow = " X  ";
+  } else if (direction == "FSW") {
+    sitMapRow1ToShow = " |X ";
+  } else if (direction == "F W") {
+    sitMapRow2ToShow = "- X ";
+  } else if (direction == "T  ") {
+    sitMapRow2ToShow = "-X- ";
   }
+  
+  String quality = command.substring(0, 1);
+  if (quality == "T") {
+    sitMapRow4ToShow = "GOOD";
+  } else if (quality == "F") {
+    sitMapRow4ToShow = "BAD ";
+    playAlertMelody();
+  }
+  
+  printSitMapRow1(sitMapRow1ToShow);
+  printSitMapRow2(sitMapRow2ToShow);
+  printSitMapRow3(sitMapRow3ToShow);
+  printSitMapRow4(sitMapRow4ToShow);
+}
 
+void printSitMapRow1(String text) {
+  printToLCD(0, 0, text);
+}
+void printSitMapRow2(String text) {
+  printToLCD(1, 0, text);
+}
+void printSitMapRow3(String text) {
+  printToLCD(2, 0, text);
+}
+void printSitMapRow4(String text) {
+  printToLCD(3, 0, text);
+}
+
+void printToLCD(int row, int startColumn, String text) {
+  lcd.setCursor(startColumn, row);
+  lcd.print(text);
 }
