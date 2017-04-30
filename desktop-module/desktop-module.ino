@@ -28,24 +28,19 @@ String sitMapRow2 = "- - ";
 String sitMapRow3 = " |  ";
 String sitMapRow4 = "    ";
 
-boolean badPosture = false;
 void setup() {
   serialSetup();
   LCDSetup();
   wireConnectionSetup();
   
-  printToLCD("ChairUp :)");
+  printToLCD(0,6, "ChairUp :)");
   playSystemStaredMelody();
 
   delay(ONE_SECOND);
 }
 
 void loop() {
-  if (badPosture) {
-    playAlertMelody();
-    badPosture = false;
-  }
-  delay(ONE_SECOND);
+   delay(100);
 }
 
 void serialSetup() {
@@ -57,6 +52,7 @@ void LCDSetup() {
   lcd.begin(20, 4);  
 }
 
+/*
 //prints " " to 5 columns x 4 rows from startColumn onward
 void clear5Columns(Int startColumn) {
   lcd.setCursor(startColumn, 0);
@@ -67,11 +63,12 @@ void clear5Columns(Int startColumn) {
   lcd.print("     ");
   lcd.setCursor(startColumn, 3);
   lcd.print("     ");
-}
+}*7
 
 /*
 Left columns 15 to 20, 4 rows
 */
+/*
 void printTo5Columns(Char charArray, Int startColumn) {
   clear5Columns(startColumn);
   int maxChars = 20;
@@ -98,7 +95,7 @@ void printTo5Columns(Char charArray, Int startColumn) {
 void printHelloWorld(){
   char *strToChar = "HelloWorld";
   printTo5Columns(strToChar, 15);
-}
+}*/
 
 void playSystemStaredMelody() {
   for (int thisNote = 0; thisNote < 8; thisNote++) {
