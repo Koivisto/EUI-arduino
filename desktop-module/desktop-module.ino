@@ -28,19 +28,27 @@ String sitMapRow2 = "- - ";
 String sitMapRow3 = " |  ";
 String sitMapRow4 = "    ";
 
+String chairUpGood = "ChairUp :)";
+String chairUpBad = "ChairUp :(";
+
+boolean isBadPosture = false;
 void setup() {
   serialSetup();
   LCDSetup();
   wireConnectionSetup();
   
-  printToLCD(0,6, "ChairUp :)");
+  printLogo(chairUpGood);
   playSystemStaredMelody();
 
   delay(ONE_SECOND);
 }
 
 void loop() {
-   delay(100);
+  if (isBadPosture) {
+    playAlertMelody();
+    isBadPosture = false;
+  }
+  delay(100);
 }
 
 void serialSetup() {
@@ -154,16 +162,20 @@ void receiveEvent(int howMany) {
     sitMapRow1ToShow = " |X ";
   } else if (direction == "F W") {
     sitMapRow2ToShow = "- X ";
-  } else if (direction == "T  ") {
+  } else if (direction.substring(0, 1) == "T") {
     sitMapRow2ToShow = "-X- ";
   }
   
   String quality = command.substring(0, 1);
+
+  printLogo(chairUpGood);
   if (quality == "T") {
     sitMapRow4ToShow = "GOOD";
   } else if (quality == "F") {
     sitMapRow4ToShow = "BAD ";
-    playAlertMelody();
+    printLogo(chairUpBad);
+    //TODO: Check time and set isBadPosture to true
+    //isBadPosture = true;
   }
   
   printSitMapRow1(sitMapRow1ToShow);
@@ -183,6 +195,10 @@ void printSitMapRow3(String text) {
 }
 void printSitMapRow4(String text) {
   printToLCD(3, 0, text);
+}
+
+void printLogo(String text) {
+  printToLCD(0, 6, text);
 }
 
 void printToLCD(int row, int startColumn, String text) {
