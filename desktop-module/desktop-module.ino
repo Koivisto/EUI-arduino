@@ -31,7 +31,10 @@ String sitMapRow4 = "    ";
 String chairUpGood = "ChairUp :)";
 String chairUpBad = "ChairUp :(";
 
-boolean isBadPosture = false;
+String warnedProsture = "";
+String sittingTooLongString = "Too long!";
+
+boolean isSittingTooLong = false;
 void setup() {
   serialSetup();
   LCDSetup();
@@ -44,11 +47,11 @@ void setup() {
 }
 
 void loop() {
-  if (isBadPosture) {
+  if (isSittingTooLong) {
     playAlertMelody();
-    isBadPosture = false;
+    isSittingTooLong = false;
   }
-  delay(100);
+  delay(1000);
 }
 
 void serialSetup() {
@@ -171,11 +174,24 @@ void receiveEvent(int howMany) {
   printLogo(chairUpGood);
   if (quality == "T") {
     sitMapRow4ToShow = "GOOD";
+    warnedProsture = "";
   } else if (quality == "F") {
     sitMapRow4ToShow = "BAD ";
     printLogo(chairUpBad);
-    //TODO: Check time and set isBadPosture to true
-    //isBadPosture = true;
+  }
+  
+  String sittingTooLong = command.substring(3, 4);
+  if (sittingTooLong == "T") {
+    printToLCD(2, 6, sittingTooLongString);
+    printToLCD(3, 8, command.substring(4, 19) + "min");
+
+    if (direction != warnedProsture) {
+      warnedProsture = direction;
+      isSittingTooLong = true;
+    }
+  } else {
+    printToLCD(2, 6, "          ");
+    printToLCD(3, 8, "        ");
   }
   
   printSitMapRow1(sitMapRow1ToShow);
