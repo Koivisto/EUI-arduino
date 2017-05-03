@@ -356,7 +356,6 @@ void printDataToSerial (boolean isValidPosture, String directionString, int sitt
 // Calculates how long it has been since movement happened, print warning if over 10 sec
 long checkImmobility () {
   
-
   //Init latest movement to 60 seconds
   long latestMovementMs = 60000L;
   // Update new values to btnsSameStateMs, find 
@@ -365,10 +364,6 @@ long checkImmobility () {
     if (btnsSameStateMs[i] < latestMovementMs) {latestMovementMs = btnsSameStateMs[i];}
   }
 
-  // If all movements have been since 10 seconds has passed, print warning
-  if (latestMovementMs > 10000 && isPressed()){
-    //Serial.println("MOVE! YOU HAVE BEEN STILL FOR TOO LONG.");                              // TODO
-  }
 
   return latestMovementMs;
 }
@@ -396,42 +391,20 @@ void checkLastRow() {
 }
 
 /**
- * Checks that regular pauses from sittings are kept.
- * Gives a warning if last standing pause has been over 60 seconds ago.
- * Counts down from 10 seconds for minimum pause duration.
+ * returns ms from last pause
  */
-void checkLastPause() {
+long giveMsSinceLastPause() {
   if (isPressed()) {
     sinceLastStandMs = millis() - lastStandMs;
     sincePauseStart = millis(); //updated here until pause really starts
+    return sinceLastStandMs;
   }
   else {
     lastStandMs = millis(); //updated here until sitting really starts
     sincePauseStart = millis() - sinceLastStandMs; // unintuitive naming for this
-  }
-
-  // Gives warning if last standing pause has been over 60 seconds ago
-  if (sinceLastStandMs > 60000 && isPressed()){
-    Serial.println("STAND UP! YOU HAVE BEEN SITTING FOR TOO LONG.");                        // TODO
-  }
-  // Counts down from 10 seconds for minimum pause duration
-  else if (sincePauseStart > 0 && sincePauseStart <= 10000) {
-    Serial.print("STAY AWAY FOR " );                                                        // TODO
-    Serial.print((10000 - sincePauseStart)/1000);                                           // TODO
-    Serial.println(" SECONDS" );                                                            // TODO
-    // Warns if violated
-    if (isPressed()) {
-      Serial.println("I SEE YOU SITTING!" );                                                // TODO
-    }
-  }
-  //else chair is abandoned and feels lonely. It no longer wants to be lonely.
-  else if (!isPressed()){
-    Serial.println("SIT DOWN!");                                                            // TODO
+    return 0;
   }
 }
-
-
-
 
 
 /*-------------------------------------------
@@ -482,7 +455,8 @@ void loop() {
     isCorrectPosture = false;
   }
 
-  duration = checkImmobility() / 1000 / 60;
+  //duration = checkImmobility() / 1000 / 60;
+  duration = giveMsSinceLastPause() / 1000 / 60;
 
   // Gets the direction string of the current center of mass w.r.t. the reference position
   direction = getDirectionString(centerOfMassX, centerOfMassY);
