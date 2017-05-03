@@ -149,22 +149,22 @@ void receiveEvent(int howMany) {
   String sitMapRow4ToShow = sitMapRow4;
 
   String direction = command.substring(0, 3);
-  if (direction == "FNW") {
-    sitMapRow3ToShow = " |X ";
-  } else if (direction == "F N") {
-    sitMapRow3ToShow = " X  ";
-  } else if (direction == "FNE") {
+  if (direction == "FSW") {
     sitMapRow3ToShow = "X|  ";
-  } else if (direction == "F E") {
-    sitMapRow2ToShow = "X - ";
-  } else if (direction == "FSE") {
-    sitMapRow1ToShow = "X|  ";
   } else if (direction == "F S") {
-    sitMapRow1ToShow = " X  ";
-  } else if (direction == "FSW") {
-    sitMapRow1ToShow = " |X ";
-  } else if (direction == "F W") {
+    sitMapRow3ToShow = " X  ";
+  } else if (direction == "FSE") {
+    sitMapRow3ToShow = " |X ";
+  } else if (direction == "F E") {
     sitMapRow2ToShow = "- X ";
+  } else if (direction == "FNE") {
+    sitMapRow1ToShow = " |X ";
+  } else if (direction == "F N") {
+    sitMapRow1ToShow = " X  ";
+  } else if (direction == "FNW") {
+    sitMapRow1ToShow = "X|  ";
+  } else if (direction == "F W") {
+    sitMapRow2ToShow = "X - ";
   } else if (direction.substring(0, 1) == "T") {
     sitMapRow2ToShow = "-X- ";
   }
