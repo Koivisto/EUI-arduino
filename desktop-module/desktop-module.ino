@@ -42,6 +42,7 @@ void setup() {
   
   printLogo(chairUpGood);
   playSystemStaredMelody();
+  blink();
 
   delay(ONE_SECOND);
 }
@@ -221,3 +222,26 @@ void printToLCD(int row, int startColumn, String text) {
   lcd.setCursor(startColumn, row);
   lcd.print(text);
 }
+
+void blink() {
+/*
+  "  /^^^\      /^^^\  "
+  " | **  |    | **  | "
+  " | **  |    | **  | "
+  "  \___/      \___/  "
+
+  "                    "
+  " |     |    |     | "
+  " |     |    |     | "
+  " ///|||\\  ///|||\\ "
+*/
+  printToLCD(0, 0, "  /^^^i      /^^^i   | **  |    | **  |  | **  |    | **  |   Y___/      Y___/  ");
+  delay(1000);
+  printToLCD(0, 0, "                     |     |    |     |  |     |    |     |  ///|||||  ///||||| ");
+  delay(400);
+  printToLCD(0, 0, "  /^^^i      /^^^i   | **  |    | **  |  | **  |    | **  |   Y___/      Y___/  ");
+  delay(1000);
+  printToLCD(0, 0, "                            lol                                                 ");
+  
+}
+
