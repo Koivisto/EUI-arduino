@@ -28,9 +28,6 @@ String chairUpBad = "ChairUp :(";
 String warnedProsture = "";
 String sittingTooLongString = "Too long!";
 boolean isSittingTooLong = false;
-long currentMs, previousMs = 0L;
-long alertIntervalMs = 10000L;
-
 void setup() {
   serialSetup();
   LCDSetup();
@@ -44,11 +41,8 @@ void setup() {
 }
 
 void loop() {
-  currentMs = millis();
-  // if person has been sitting for too long and alertIntervalMs has passed, play new alert
-  if (isSittingTooLong && (currentMs - previousMs > alertIntervalMs)) {
-    playAlertMelody(2);
-    previousMs = millis()
+  if (isSittingTooLong) {
+    playAlertMelody();
     isSittingTooLong = false;
   }
   delay(1000);
