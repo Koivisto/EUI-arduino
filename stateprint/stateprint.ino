@@ -94,13 +94,13 @@ void checkLastPause() {
   else if (sincePauseStart > 0 && sincePauseStart <= 10000) {
     Serial.print("STAY AWAY FOR " );
     Serial.print((10000 - sincePauseStart)/1000);
-    Serial.println(" SECONDS" );
+    Serial.print(" SECONDS" );
     // Warns if violated
-    if (isPressed()) {Serial.println("I SEE YOU SITTING!" );}
+    if (isPressed()) {Serial.print("I SEE YOU SITTING!" );}
   }
   //else chair is abandoned and feels lonely. It no longer wants to be lonely.
   else if (!isPressed()){
-    Serial.println("SIT DOWN!");
+    Serial.print("SIT DOWN!");
   }
 }
 
@@ -110,7 +110,7 @@ void loop() {
   // Read the button inputs, if state has changed update also btnsLastStateChangeMs array
   for (int i = 0; i <= 11; i++){
     boolean fetchedState = false;
-    if (digitalRead(btnsInput[i]) == HIGH){
+    if (digitalRead(btnsInput[i]) == LOW){//HIGH
       fetchedState = true;
     } 
     // Update button state to new state if not the same as before. 
@@ -121,6 +121,10 @@ void loop() {
     }
   }
 
+  /*
+   * Print "0 1 1 0 0 1 1 0 1 1 1 1"
+   * 
+   * 
   for (int i = 0; i <= 11; i++){
     if (btnsState[i]){
       printI();
@@ -129,12 +133,9 @@ void loop() {
       printO();
     }
   }
-  Serial.println("");
+  Serial.println("");*/
 
-  // Check various conditions, print warnings if needed
-  //checkImmobility();
-  //checkLastRow();
-  //checkLastPause();
+
 
   /* Print state diagram 
   *  1-4 | _ _ _ _ |
@@ -144,11 +145,18 @@ void loop() {
   *  X marks pressed state. 
   */
 
-  /*for (int i = 0; i <= 11; i++){
-    if (i=0) {Serial.print("1-4 |");} //Row 1 start
-    if (i=3) {Serial.println(" |");Serial.print("5-8 |");} //Row 1 end, Row 2 start
-    if (i=7) {Serial.println(" |");Serial.print("9-12|");} //Row 2 end, Row 3 start
+  for (int i = 0; i <= 11; i++){
+    //if (i=0) {Serial.print("1-4 |");} //Row 1 start
+    //if (i=3) {Serial.println(" |");Serial.print("5-8 |");} //Row 1 end, Row 2 start
+    //if (i=7) {Serial.println(" |");Serial.print("9-12|");} //Row 2 end, Row 3 start
     if (btnsState[i]) {printI();} else {printO();}
-    if (i=11) {Serial.print("1-4 |");Serial.println("---------------");} //Row 3 end
-  }*/
+    //if (i=11) {Serial.print("1-4 |");Serial.println("---------------");} //Row 3 end
+  }
+  
+  // Check various conditions, print warnings if needed
+  checkImmobility();
+  checkLastRow();
+  checkLastPause();
+  
+  Serial.println("");
 }
