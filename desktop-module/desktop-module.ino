@@ -4,10 +4,8 @@
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int PIEZO_BUFFER_PIN = 9;
-
 int ONE_SECOND = 1000;
 double pauseBetweenNotesConstant = 1.3;
-
 int SYSTEM_STARTED_MELODY[] = {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
 };
@@ -15,25 +13,20 @@ int SYSTEM_STARTED_MELODY[] = {
 int SYSTEM_STARTED_NOTE_DURATIONS[] = {
   4, 8, 8, 4, 4, 4, 4, 4
 };
-
 int ALERT_MELODY[] = {
   NOTE_C4, NOTE_C4, NOTE_C4
 };
 int ALERT_NOTE_DURATIONS[] = {
   8, 8, 8
 };
-
-String sitMapRow1 = " |  ";
+String sitMapRow1 = " |  "; //crosshair
 String sitMapRow2 = "- - ";
 String sitMapRow3 = " |  ";
 String sitMapRow4 = "    ";
-
 String chairUpGood = "ChairUp :)";
 String chairUpBad = "ChairUp :(";
-
 String warnedProsture = "";
 String sittingTooLongString = "Too long!";
-
 boolean isSittingTooLong = false;
 long currentMs, previousMs = 0L;
 long alertIntervalMs = 10000L;
@@ -52,6 +45,7 @@ void setup() {
 
 void loop() {
   currentMs = millis();
+  // if person has been sitting for too long and alertIntervalMs has passed, play new alert
   if (isSittingTooLong && (currentMs - previousMs > alertIntervalMs)) {
     playAlertMelody(2);
     previousMs = millis()
@@ -65,54 +59,9 @@ void serialSetup() {
 }
 
 void LCDSetup() {
-  // set up the LCD's number of columns and rows:
+  // set up the LCD's number of columns and rows
   lcd.begin(20, 4);  
 }
-
-/*
-//prints " " to 5 columns x 4 rows from startColumn onward
-void clear5Columns(Int startColumn) {
-  lcd.setCursor(startColumn, 0);
-  lcd.print("     ");
-  lcd.setCursor(startColumn, 1);
-  lcd.print("     ");
-  lcd.setCursor(startColumn, 2);
-  lcd.print("     ");
-  lcd.setCursor(startColumn, 3);
-  lcd.print("     ");
-}*7
-
-/*
-Left columns 15 to 20, 4 rows
-*/
-/*
-void printTo5Columns(Char charArray, Int startColumn) {
-  clear5Columns(startColumn);
-  int maxChars = 20;
-  int maxInRowRow = 20/4;
-  int len = sizeof(charArray);
-  for (i = 0; i < len %% i >= maxChars; i++){
-    if (i = 0){
-      lcd.setCursor(startColumn, 0);
-    }
-    else if (i = maxInRowRow + 1){
-      lcd.setCursor(startColumn, 1);
-    }
-    else if (i = maxInRowRow * 2 + 1){
-      lcd.setCursor(startColumn, 2);
-    }
-    else if (i = maxInRowRow * 3 + 1){
-      lcd.setCursor(startColumn, 3);
-    }
-    lcd.print(charArray[i]);
-    //Do I need to setCursor to next position?
-  }
-}
-
-void printHelloWorld(){
-  char *strToChar = "HelloWorld";
-  printTo5Columns(strToChar, 15);
-}*/
 
 void playSystemStaredMelody() {
   for (int thisNote = 0; thisNote < 8; thisNote++) {
@@ -149,11 +98,11 @@ void receiveEvent(int howMany) {
   }
   Serial.println(command);
 
+  //Center of gravity visualization, X moves around crosshair
   String sitMapRow1ToShow = sitMapRow1;
   String sitMapRow2ToShow = sitMapRow2;
   String sitMapRow3ToShow = sitMapRow3;
   String sitMapRow4ToShow = sitMapRow4;
-
   String direction = command.substring(0, 3);
   if (direction == "FSW") {
     sitMapRow3ToShow = "X|  ";
@@ -175,8 +124,8 @@ void receiveEvent(int howMany) {
     sitMapRow2ToShow = "-X- ";
   }
   
+  //Overall posture quality feedback
   String quality = command.substring(0, 1);
-
   printLogo(chairUpGood);
   if (quality == "T") {
     sitMapRow4ToShow = "GOOD";
@@ -186,6 +135,7 @@ void receiveEvent(int howMany) {
     printLogo(chairUpBad);
   }
   
+  //Sitting time information
   String sittingTooLong = command.substring(3, 4);
   if (sittingTooLong == "T") {
     printToLCD(2, 6, sittingTooLongString);
@@ -206,22 +156,11 @@ void receiveEvent(int howMany) {
   printSitMapRow4(sitMapRow4ToShow);
 }
 
-void printSitMapRow1(String text) {
-  printToLCD(0, 0, text);
-}
-void printSitMapRow2(String text) {
-  printToLCD(1, 0, text);
-}
-void printSitMapRow3(String text) {
-  printToLCD(2, 0, text);
-}
-void printSitMapRow4(String text) {
-  printToLCD(3, 0, text);
-}
-
-void printLogo(String text) {
-  printToLCD(0, 6, text);
-}
+void printSitMapRow1(String text) { printToLCD(0, 0, text); }
+void printSitMapRow2(String text) { printToLCD(1, 0, text); }
+void printSitMapRow3(String text) { printToLCD(2, 0, text); }
+void printSitMapRow4(String text) { printToLCD(3, 0, text); }
+void printLogo(String text) { printToLCD(0, 6, text); }
 
 void printToLCD(int row, int startColumn, String text) {
   lcd.setCursor(startColumn, row);
