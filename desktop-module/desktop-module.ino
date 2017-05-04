@@ -46,7 +46,7 @@ void setup() {
 void loop() {
   currentMs = millis();
   if (isSittingTooLong && (currentMs - previousMs > alertIntervalMs)) {
-    playAlertMelody();
+    playAlertMelody(2);
     previousMs = millis()
     isSittingTooLong = false;
   }
@@ -73,8 +73,8 @@ void playSystemStaredMelody() {
   }
 }
 
-void playAlertMelody() {
-  for (int thisNote = 0; thisNote < 3; thisNote++) {
+void playAlertMelody(int repeatTimes) {
+  for (int thisNote = 0; thisNote < repeatTimes; thisNote++) {
     int noteDuration = ONE_SECOND / ALERT_NOTE_DURATIONS[thisNote];
     tone(PIEZO_BUFFER_PIN, ALERT_MELODY[thisNote], noteDuration);
 
