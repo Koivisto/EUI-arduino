@@ -41,11 +41,16 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
   currentMs = millis();
   // if person has been sitting for too long and alertIntervalMs has passed, play new alert
   if (isSittingTooLong && (currentMs - previousMs > alertIntervalMs)) {
     playAlertMelody(2);
     previousMs = millis()
+=======
+  if (isSittingTooLong) {
+    playAlertMelody();
+>>>>>>> parent of cd5104c... Set 10000 ms delay to alert playing
     isSittingTooLong = false;
   }
   delay(1000);
