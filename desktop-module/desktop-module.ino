@@ -28,9 +28,6 @@ String chairUpBad = "ChairUp :(";
 String warnedProsture = "";
 String sittingTooLongString = "Too long!";
 boolean isSittingTooLong = false;
-long currentMs, previousMs = 0L;
-long alertIntervalMs = 10000L;
-
 void setup() {
   serialSetup();
   LCDSetup();
